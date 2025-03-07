@@ -5,11 +5,11 @@ import xyz.ncookie.menu.MenuItem;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Kiosk {
     private final List<Menu> menuList;
-    private final Scanner sc = new Scanner(System.in);
+
+    private final InputReader reader = new InputReader();
 
     public Kiosk(List<MenuItem> burgers, List<MenuItem> drinks, List<MenuItem> desserts) {
         menuList = new ArrayList<>(List.of(
@@ -20,56 +20,71 @@ public class Kiosk {
     }
 
     public void start() {
-        int inputMenu = -1;
-        int inputMenuItem = -1;
-
-        // 마지막에 "0"이 입력되기 전까지 루프
         while (true) {
-            inputMenu = selectMenu();
+            // 메뉴판 선택
+            int inputMenu = selectMenu();
+            
+            // 메뉴 선택에서 0이 입력되면 루프 종료
             if (inputMenu == 0) {
-                System.out.println("종료 선택됨");
                 break;
             }
 
-            // 정상적으로 메뉴 선택
-            if (inputMenu > 0 && inputMenu <= menuList.size()) {
-                Menu selectedMenu = menuList.get(inputMenu - 1);
-
-                // 해당 카테고리의 MenuItem 출력
-                System.out.printf("[ %s ] MENU\n", selectedMenu.getCategory());
-
-                selectedMenu.printMenuItems();
-                System.out.println("0. 뒤로가기");
-
-                inputMenuItem = sc.nextInt();
-                
-                // 뒤로 가기
-                if (inputMenuItem == 0) {
-                    System.out.println("메인 화면으로 돌아갑니다.");
-                    continue;
-                }
-                
-                // 정상적으로 메뉴 아이템 선택
-                if (inputMenuItem > 0 && inputMenuItem <= selectedMenu.getMenuItems().size()) {
-                    MenuItem orderedItem = selectedMenu.getMenuItems().get(inputMenuItem - 1);
-                    System.out.printf("선택한 메뉴: %s(W %.2f, %s)\n", orderedItem.getName(), orderedItem.getPrice(), orderedItem.getDesc());
-                } else {
-                    System.out.println("올바르지 않은 입력입니다!");    
-                }
-            } else {
-                System.out.println("올바르지 않은 입력입니다!");
+            // 올바르지 않은 메뉴 선택할 시 다시 입력
+            if (inputMenu == -1) {
+                continue;
             }
+
+            // MenuItem 입력
+            selectMenuItem(inputMenu);
         }
     }
 
     public int selectMenu() {
-        int inputMenu = -1;
-
+        // 메뉴 리스트 출력
         printMenuList();
         System.out.println("0. 종료      | 종료");
+        
+        // 사용자로부터 메뉴 입력 받음
+        reader.read(menuList.size());
 
-        inputMenu = sc.nextInt();
-        return inputMenu;
+        if (reader.isValid()) {
+            return reader.getValue();
+        } else {
+            // 숫자 형식이 아닌 데이터가 입력됨
+            System.out.println("올바르지 않은 입력입니다.");
+            return -1;
+        }
+    }
+
+    public void selectMenuItem(int selectedMenuIndex) {
+        Menu selectedMenu = menuList.get(selectedMenuIndex - 1);
+
+        while (true) {
+            // 해당 카테고리의 MenuItem 출력
+            System.out.printf("[ %s ] MENU\n", selectedMenu.getCategory());
+
+            // MenuItem 리스트 출력
+            selectedMenu.printMenuItems();
+            System.out.println("0. 뒤로가기");
+
+            reader.read(selectedMenu.getMenuItems().size());
+
+            // 유효한 값을 입력받을 때까지 루프
+            if (!reader.isValid()) {
+                System.out.println("올바르지 않은 입력입니다!");
+                continue;
+            }
+
+            if (reader.getValue() == 0) {
+                System.out.println("메인 화면으로 돌아갑니다.");
+                break;
+            }
+
+            // 정상적으로 메뉴 아이템 선택
+            MenuItem orderedItem = selectedMenu.getMenuItems().get(reader.getValue() - 1);
+            System.out.printf("선택한 메뉴: %s(W %.2f, %s)\n", orderedItem.getName(), orderedItem.getPrice(), orderedItem.getDesc());
+            break;
+        }
     }
 
     public void printMenuList() {
