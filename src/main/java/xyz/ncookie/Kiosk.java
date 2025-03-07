@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Kiosk {
-    List<Menu> menuList;
-    Scanner sc = new Scanner(System.in);
+    private final List<Menu> menuList;
+    private final Scanner sc = new Scanner(System.in);
 
     public Kiosk(List<MenuItem> burgers, List<MenuItem> drinks, List<MenuItem> desserts) {
         menuList = new ArrayList<>(List.of(
@@ -49,7 +49,7 @@ public class Kiosk {
                 // 정상적으로 메뉴 아이템 선택
                 if (inputMenuItem > 0 && inputMenuItem <= selectedMenu.getMenuItems().size()) {
                     MenuItem orderedItem = selectedMenu.getMenuItems().get(inputMenuItem - 1);
-                    System.out.printf("선택한 메뉴: %s(W %.2f, %s)\n", orderedItem.name, orderedItem.price, orderedItem.desc);
+                    System.out.printf("선택한 메뉴: %s(W %.2f, %s)\n", orderedItem.getName(), orderedItem.getPrice(), orderedItem.getDesc());
                 } else {
                     System.out.println("올바르지 않은 입력입니다!");    
                 }
