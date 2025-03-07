@@ -1,4 +1,4 @@
-package xyz.ncookie;
+package xyz.ncookie.menu;
 
 public class MenuItem {
     private final String name;

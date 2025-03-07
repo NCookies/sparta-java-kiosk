@@ -1,4 +1,4 @@
-package xyz.ncookie;
+package xyz.ncookie.menu;
 
 import java.util.List;
 

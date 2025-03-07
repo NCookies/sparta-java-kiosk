@@ -1,4 +1,7 @@
-package xyz.ncookie;
+package xyz.ncookie.kiosk;
+
+import xyz.ncookie.menu.Menu;
+import xyz.ncookie.menu.MenuItem;
 
 import java.util.ArrayList;
 import java.util.List;
