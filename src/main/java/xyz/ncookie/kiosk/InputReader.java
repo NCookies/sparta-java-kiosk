@@ -18,7 +18,7 @@ public class InputReader {
 
         try {
             value = sc.nextInt();
-            if (value > 0 && value <= listSize) {
+            if (value >= 0 && value <= listSize) {
                 isValid = true;
             }
         } catch (InputMismatchException e) {
