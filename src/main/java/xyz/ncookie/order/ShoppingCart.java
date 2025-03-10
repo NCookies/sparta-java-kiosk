@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public class ShoppingCart {
 
-    private final List<ShoppingCartItem> shoppingCartItemList = new ArrayList<>();
+    private List<ShoppingCartItem> shoppingCartItemList = new ArrayList<>();
     private double totalPrice;      // 장바구니 총 가격
 
     public void addCartItem(KioskMenuSelect category, MenuItem menuItem) {
@@ -39,6 +39,10 @@ public class ShoppingCart {
     }
 
     public void clearShoppingCart() {
+        shoppingCartItemList = shoppingCartItemList.stream()
+                .filter(s -> !Objects.equals(s.getMenuItem().name(), "SmokeShack"))
+                .toList();
+
         shoppingCartItemList.clear();
         totalPrice = 0;
     }
