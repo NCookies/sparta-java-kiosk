@@ -11,11 +11,11 @@ public class Kiosk {
 
     private final InputReader reader = new InputReader();
 
-    public Kiosk(List<MenuItem> burgers, List<MenuItem> drinks, List<MenuItem> desserts) {
+    public Kiosk() {
         menuList = new ArrayList<>(List.of(
-                new Menu("Burgers", burgers),
-                new Menu("Drinks", drinks),
-                new Menu("Desserts", desserts)
+                new Menu("Burgers", KioskMenu.BURGERS),
+                new Menu("Drinks", KioskMenu.DRINKS),
+                new Menu("Desserts", KioskMenu.DESSERTS)
         ));
     }
 
