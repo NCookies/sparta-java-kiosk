@@ -1,12 +1,14 @@
 package xyz.ncookie.menu;
 
+import xyz.ncookie.data.KioskMenuSelect;
+
 import java.util.List;
 
 public class Menu {
-    private final String category;
+    private final KioskMenuSelect category;
     private final List<MenuItem> menuItems;
 
-    public Menu(String category, List<MenuItem> menuItems) {
+    public Menu(KioskMenuSelect category, List<MenuItem> menuItems) {
         this.category = category;
         this.menuItems = menuItems;
     }
@@ -21,7 +23,7 @@ public class Menu {
     /*
      * Getter & Setter
      */
-    public String getCategory() {
+    public KioskMenuSelect getCategory() {
         return category;
     }
 

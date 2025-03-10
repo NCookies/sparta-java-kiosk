@@ -2,20 +2,31 @@ package xyz.ncookie.data;
 
 import java.util.stream.Stream;
 
-public enum KioskMenuCategory {
-    NONE(0), BURGERS(1), DRINKS(2), DESSERTS(3);
+public enum KioskMenuSelect {
+    NONE(0, "NONE"),
+    BURGERS(1, "BURGERS"),
+    DRINKS(2, "DRINKS"),
+    DESSERTS(3, "DESSERTS"),
+    ORDER(4, "ORDER"),
+    CANCEL(5, "CANCEL");
 
     private final int index;
+    private final String desc;
 
-    KioskMenuCategory(int index) {
+    KioskMenuSelect(int index, String desc) {
         this.index = index;
+        this.desc = desc;
     }
 
     public int getIndex() {
         return index;
     }
 
-    public static KioskMenuCategory fromValue(int value) {
+    public String getDesc() {
+        return desc;
+    }
+
+    public static KioskMenuSelect fromValue(int value) {
         return Stream.of(values())
                 .filter(c -> c.index == value)
                 .findFirst()
