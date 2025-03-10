@@ -5,7 +5,6 @@ import xyz.ncookie.data.KioskMenuSelect;
 import xyz.ncookie.menu.Menu;
 import xyz.ncookie.menu.MenuItem;
 import xyz.ncookie.order.ShoppingCart;
-import xyz.ncookie.order.ShoppingCartItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +16,6 @@ public class Kiosk {
     private final InputReader reader = new InputReader();
     private final ShoppingCart shoppingCart = new ShoppingCart();
 
-    private final List<KioskMenuSelect> MENU_CATEGORY = List.of(
-            KioskMenuSelect.BURGERS,
-            KioskMenuSelect.DRINKS,
-            KioskMenuSelect.DESSERTS
-    );
 
     public Kiosk() {
         menuList = new ArrayList<>(List.of(
@@ -214,7 +208,7 @@ public class Kiosk {
         System.out.println();
         System.out.println("[ Orders ]");
 
-        for (KioskMenuSelect category : MENU_CATEGORY) {
+        for (KioskMenuSelect category : KioskMenu.MENU_CATEGORIES) {
             System.out.printf("<< %s >> \n", category);
             shoppingCart.getShoppingCartListByCategory(category)
                     .forEach(s ->

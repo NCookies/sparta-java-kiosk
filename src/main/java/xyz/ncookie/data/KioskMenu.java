@@ -7,6 +7,12 @@ import java.util.List;
 // 키오스크에서 사용하는 상세 메뉴 정보
 public class KioskMenu {
 
+    public static final List<KioskMenuSelect> MENU_CATEGORIES = List.of(
+            KioskMenuSelect.BURGERS,
+            KioskMenuSelect.DRINKS,
+            KioskMenuSelect.DESSERTS
+    );
+
     public static final List<MenuItem> BURGERS = List.of(
         new MenuItem("ShackBurger", 6.9, "토마토, 양상추, 쉑소스가 토핑된 치즈버거"),
         new MenuItem("SmokeShack", 8.9, "베이컨, 체리 페퍼에 쉑소스가 토핑된 치즈버거"),
