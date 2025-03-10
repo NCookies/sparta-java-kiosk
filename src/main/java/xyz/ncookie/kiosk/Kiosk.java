@@ -1,5 +1,6 @@
 package xyz.ncookie.kiosk;
 
+import xyz.ncookie.data.DiscountRate;
 import xyz.ncookie.data.KioskMenu;
 import xyz.ncookie.data.KioskMenuSelect;
 import xyz.ncookie.menu.Menu;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class Kiosk {
+
     private final List<Menu> menuList;
 
     private final InputReader reader = new InputReader();
@@ -54,14 +56,18 @@ public class Kiosk {
                     printShoppingCartList();
 
                     if (selectOrder()) {
-                        System.out.printf("주문이 완료되었습니다. 금액은 W %.2f 입니다.\n", shoppingCart.getTotalPrice());
+                        // ===========================================
+                        // 할인 적용 선택
+                        // ===========================================
+                        DiscountRate discountRate = selectDiscount();
+                        System.out.printf("주문이 완료되었습니다. 금액은 W %.2f 입니다.\n",
+                                shoppingCart.getTotalPrice() * (1 - discountRate.getRate()));
                         break;
                     } else {
                         System.out.println("메인 화면으로 돌아갑니다.");
                         continue;
                     }
-                } 
-                else if (selectedMenu == KioskMenuSelect.CANCEL) {  // 주문 취소하기
+                } else if (selectedMenu == KioskMenuSelect.CANCEL) {  // 주문 취소하기
                     // 초기 상태로 복구 (장바구니 비우기)
                     System.out.println("주문을 취소합니다. 감사합니다.");
 
@@ -190,6 +196,23 @@ public class Kiosk {
             }
 
             return reader.getValue() == 1;
+        }
+    }
+
+    private DiscountRate selectDiscount() {
+        while (true) {
+            System.out.println("할인 정보를 입력해주세요.");
+            DiscountRate.printDiscountRate();
+
+            reader.read(4);
+
+            if (!reader.isValid() || reader.getValue() == 0) {
+                System.out.println("올바르지 않은 입력입니다!");
+                printSeparateLine();
+                continue;
+            }
+
+            return DiscountRate.fromIndex(reader.getValue());
         }
     }
 
