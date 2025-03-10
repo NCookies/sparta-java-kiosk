@@ -38,16 +38,19 @@ public class Kiosk {
                 continue;
             }
             
-            KioskMenuSelect selectedMenuCategory = optionalKioskMenuCategory.get();
+            KioskMenuSelect selectedMenu = optionalKioskMenuCategory.get();
 
             // 메뉴 선택에서 0이 입력되면 루프 종료
-            if (selectedMenuCategory == KioskMenuSelect.NONE) {
+            if (selectedMenu == KioskMenuSelect.NONE) {
                 break;
             }
             
             // 장바구니에 상품이 들어있는 상태에서
             if (!shoppingCart.isCartEmpty()) {
-                if (selectedMenuCategory == KioskMenuSelect.ORDER) {    // 주문 선택
+                // ===========================================
+                // 주문 선택
+                // ===========================================
+                if (selectedMenu == KioskMenuSelect.ORDER) {    // 주문하기
                     printShoppingCartList();
 
                     if (selectOrder()) {
@@ -58,7 +61,7 @@ public class Kiosk {
                         continue;
                     }
                 } 
-                else if (selectedMenuCategory == KioskMenuSelect.CANCEL) {  // 주문 취소
+                else if (selectedMenu == KioskMenuSelect.CANCEL) {  // 주문 취소하기
                     // 초기 상태로 복구 (장바구니 비우기)
                     System.out.println("주문을 취소합니다. 감사합니다.");
 
@@ -72,7 +75,7 @@ public class Kiosk {
             // ===========================================
             // 상세 메뉴(MenuItem) 선택
             // ===========================================
-            Optional<MenuItem> optionalMenuItem = selectMenuItem(selectedMenuCategory);
+            Optional<MenuItem> optionalMenuItem = selectMenuItem(selectedMenu);
             if (optionalMenuItem.isPresent()) {
                 MenuItem selectedMenuItem = optionalMenuItem.get();
                 System.out.printf("선택한 메뉴: %s(W %.2f, %s)\n\n", selectedMenuItem.name(), selectedMenuItem.price(), selectedMenuItem.desc());
@@ -82,7 +85,7 @@ public class Kiosk {
                 // ===========================================
                 if (selectAddShoppingCartItem()) {
                     System.out.printf("%s 이(가) 장바구니에 추가되었습니다.\n", selectedMenuItem.name());
-                    shoppingCart.addCartItem(selectedMenuCategory, selectedMenuItem);
+                    shoppingCart.addCartItem(selectedMenu, selectedMenuItem);
                 } else {
                     System.out.println("장바구니 담기를 취소합니다.");
                 }
