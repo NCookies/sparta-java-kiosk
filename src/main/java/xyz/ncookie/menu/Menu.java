@@ -14,7 +14,7 @@ public class Menu {
     public void printMenuItems() {
         for (int i = 0; i < menuItems.size(); i++) {
             MenuItem item = menuItems.get(i);
-            System.out.printf("%d. %s\t | W %.2f\t | %s\n", i + 1, item.getName(), item.getPrice(), item.getDesc());
+            System.out.printf("%d. %s\t | W %.2f\t | %s\n", i + 1, item.name(), item.price(), item.desc());
         }
     }
 
