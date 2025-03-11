@@ -4,6 +4,7 @@ import xyz.ncookie.data.KioskMenuSelect;
 import xyz.ncookie.menu.MenuItem;
 
 public class ShoppingCartItem {
+
     private final KioskMenuSelect category;     // 메뉴 카테고리
     private final MenuItem menuItem;              // 메뉴 정보
     private int quantity;                         // 수량
@@ -29,4 +30,5 @@ public class ShoppingCartItem {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
 }

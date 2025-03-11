@@ -5,6 +5,7 @@ import xyz.ncookie.data.KioskMenuSelect;
 import java.util.List;
 
 public class Menu {
+
     private final KioskMenuSelect category;
     private final List<MenuItem> menuItems;
 
@@ -23,4 +24,5 @@ public class Menu {
     public List<MenuItem> getMenuItems() {
         return menuItems;
     }
+
 }
