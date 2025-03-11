@@ -1,6 +1,6 @@
 package xyz.ncookie.io;
 
-import xyz.ncookie.data.DiscountRate;
+import xyz.ncookie.data.DiscountType;
 import xyz.ncookie.data.KioskMenu;
 import xyz.ncookie.data.KioskMenuSelect;
 import xyz.ncookie.menu.Menu;
@@ -64,7 +64,7 @@ public class ConsolePrinter implements Printer {
     }
 
     public void printDiscountRate() {
-        for (DiscountRate rate : DiscountRate.values()) {
+        for (DiscountType rate : DiscountType.values()) {
             System.out.printf("%d. %-8s : %4.1f%% \n",
                     rate.ordinal() + 1,
                     rate.getTarget(),
@@ -74,7 +74,7 @@ public class ConsolePrinter implements Printer {
     }
 
     public void printSeparateLine() {
-        System.out.println("===========================================\n");
+        System.out.println("===========================================");
     }
 
 }

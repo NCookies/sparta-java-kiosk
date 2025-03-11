@@ -2,7 +2,8 @@ package xyz.ncookie.data;
 
 import java.util.stream.Stream;
 
-public enum DiscountRate {
+public enum DiscountType {
+
     HONORED_CITIZEN(1, "국가유공자", 0.1),
     SOLDIER(2, "군인", 0.05),
     STUDENT(3, "학생", 0.03),
@@ -12,7 +13,7 @@ public enum DiscountRate {
     private final String target;
     private final double rate;
 
-    DiscountRate(int index, String target, double rate) {
+    DiscountType(int index, String target, double rate) {
         this.index = index;
         this.target = target;
         this.rate = rate;
@@ -26,10 +27,11 @@ public enum DiscountRate {
         return rate;
     }
 
-    public static DiscountRate fromIndex(int index) {
+    public static DiscountType fromIndex(int index) {
         return Stream.of(values())
                 .filter(d -> d.index == index)
                 .findFirst()
                 .get();
     }
+
 }

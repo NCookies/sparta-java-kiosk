@@ -1,6 +1,6 @@
 package xyz.ncookie.kiosk;
 
-import xyz.ncookie.data.DiscountRate;
+import xyz.ncookie.data.DiscountType;
 import xyz.ncookie.data.KioskMenu;
 import xyz.ncookie.data.KioskMenuSelect;
 import xyz.ncookie.io.ConsolePrinter;
@@ -8,6 +8,7 @@ import xyz.ncookie.io.Printer;
 import xyz.ncookie.io.Reader;
 import xyz.ncookie.menu.Menu;
 import xyz.ncookie.menu.MenuItem;
+import xyz.ncookie.order.Order;
 import xyz.ncookie.order.ShoppingCart;
 
 import java.util.ArrayList;
@@ -56,12 +57,14 @@ public class Kiosk {
                     printer.printShoppingCartList(shoppingCart);
 
                     if (selectOrder()) {
+                        // 주문 객체 생성
+                        Order order = new Order(shoppingCart.getTotalPrice());
+
                         // ===========================================
-                        // 할인 적용 선택
+                        // 할인 적용 및 주문 완료
                         // ===========================================
-                        DiscountRate discountRate = selectDiscount();
-                        printer.print(String.format("주문이 완료되었습니다. 금액은 W %.2f 입니다.\n",
-                                shoppingCart.getTotalPrice() * (1 - discountRate.getRate())));
+                        order.applyDiscount(selectDiscount());
+                        order.finishOrder();
                         break;
                     } else {
                         printer.print("메인 화면으로 돌아갑니다.");
@@ -170,13 +173,13 @@ public class Kiosk {
         return reader.getValue() == 1;
     }
 
-    private DiscountRate selectDiscount() {
+    private DiscountType selectDiscount() {
         printer.print("할인 정보를 입력해주세요.");
         printer.printDiscountRate();
 
         reader.readValidInput(4);
 
-        return DiscountRate.fromIndex(reader.getValue());
+        return DiscountType.fromIndex(reader.getValue());
     }
 
 }
