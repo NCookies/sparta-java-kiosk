@@ -47,8 +47,8 @@ public class ShoppingCart {
         totalPrice = 0;
     }
 
-    public boolean isCartEmpty() {
-        return shoppingCartItemList.isEmpty();
+    public boolean isCartNotEmpty() {
+        return !shoppingCartItemList.isEmpty();
     }
 
 }

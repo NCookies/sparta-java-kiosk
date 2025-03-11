@@ -46,7 +46,7 @@ public class Kiosk {
             }
             
             // 장바구니에 상품이 들어있는 상태에서
-            if (!shoppingCart.isCartEmpty()) {
+            if (shoppingCart.isCartNotEmpty()) {
                 // ===========================================
                 // 주문하기 또는 취소 선택
                 // ===========================================
@@ -108,7 +108,7 @@ public class Kiosk {
         printer.print("0. 종료 \t | 종료");
 
         // 장바구니가 비어있지 않다면 내용 출력
-        if (!shoppingCart.isCartEmpty()) {
+        if (shoppingCart.isCartNotEmpty()) {
             printer.printOrderSelect();
 
             // 사용자로부터 메뉴 입력 받음. 장바구니에 상품이 들어있다면 선택지 2개 추가
