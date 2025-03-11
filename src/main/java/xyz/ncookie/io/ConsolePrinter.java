@@ -6,6 +6,7 @@ import xyz.ncookie.data.KioskMenuSelect;
 import xyz.ncookie.menu.Menu;
 import xyz.ncookie.menu.MenuItem;
 import xyz.ncookie.order.ShoppingCart;
+import xyz.ncookie.order.ShoppingCartItem;
 
 import java.util.List;
 
@@ -40,21 +41,25 @@ public class ConsolePrinter implements Printer {
     }
 
     public void printShoppingCartList(ShoppingCart shoppingCart) {
+        printSeparateLine();
         System.out.println("아래와 같이 주문 하시겠습니까?");
         System.out.println();
         System.out.println("[ Orders ]");
 
         for (KioskMenuSelect category : KioskMenu.MENU_CATEGORIES) {
-            System.out.printf("<< %s >> \n", category);
-            shoppingCart.getShoppingCartListByCategory(category)
-                    .forEach(s ->
+            List<ShoppingCartItem> itemList = shoppingCart.getShoppingCartListByCategory(category);
+            if (!itemList.isEmpty()) {
+                System.out.printf("<< %s >> \n", category);
+                itemList
+                        .forEach(s ->
                             System.out.printf("%d EA * %s \t | W %.2f\t | %s\n",
                                     s.getQuantity(),
                                     s.getMenuItem().name(),
                                     s.getMenuItem().price(),
                                     s.getMenuItem().desc()
                             )
-                    );
+                        );
+            }
         }
 
         System.out.println();

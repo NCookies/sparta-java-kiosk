@@ -92,6 +92,7 @@ public class Kiosk {
             if (optionalMenuItem.isPresent()) {
                 MenuItem selectedMenuItem = optionalMenuItem.get();
                 printer.print(String.format("선택한 메뉴: %s(W %.2f, %s)", selectedMenuItem.name(), selectedMenuItem.price(), selectedMenuItem.desc()));
+                printer.printSeparateLine();
 
                 // ===========================================
                 // 장바구니 선택
