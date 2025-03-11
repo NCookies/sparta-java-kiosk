@@ -18,10 +18,6 @@ public enum DiscountRate {
         this.rate = rate;
     }
 
-    public int getIndex() {
-        return index;
-    }
-
     public String getTarget() {
         return target;
     }
@@ -35,16 +31,5 @@ public enum DiscountRate {
                 .filter(d -> d.index == index)
                 .findFirst()
                 .get();
-    }
-    
-    // TODO: 출력 전용 클래스로 옮겨야 함
-    public static void printDiscountRate() {
-        for (DiscountRate rate : DiscountRate.values()) {
-            System.out.printf("%d. %-8s : %4.1f%% \n",
-                    rate.ordinal() + 1,
-                    rate.getTarget(),
-                    rate.getRate() * 100
-            );
-        }
     }
 }
