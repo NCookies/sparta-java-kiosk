@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public class ShoppingCart {
 
-    private List<ShoppingCartItem> shoppingCartItemList = new ArrayList<>();
+    private final List<ShoppingCartItem> shoppingCartItemList = new ArrayList<>();
     private double totalPrice;      // 장바구니 총 가격
 
     public void addCartItem(KioskMenuSelect category, MenuItem menuItem) {
@@ -39,9 +39,13 @@ public class ShoppingCart {
     }
 
     public void clearShoppingCart() {
-        shoppingCartItemList = shoppingCartItemList.stream()
-                .filter(s -> !Objects.equals(s.getMenuItem().name(), "SmokeShack"))
-                .toList();
+        // stream 활용해서 특정 메뉴 장바구니에서 제거
+        shoppingCartItemList.stream()
+                .filter(s -> Objects.equals(s.getMenuItem().name(), "SmokeShack"))
+                .toList()
+                        .forEach(
+                                shoppingCartItemList::remove
+                        );
 
         shoppingCartItemList.clear();
         totalPrice = 0;
