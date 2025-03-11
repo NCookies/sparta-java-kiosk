@@ -3,6 +3,8 @@ package xyz.ncookie.kiosk;
 import xyz.ncookie.data.DiscountRate;
 import xyz.ncookie.data.KioskMenu;
 import xyz.ncookie.data.KioskMenuSelect;
+import xyz.ncookie.io.Printer;
+import xyz.ncookie.io.Reader;
 import xyz.ncookie.menu.Menu;
 import xyz.ncookie.menu.MenuItem;
 import xyz.ncookie.order.ShoppingCart;
@@ -15,7 +17,9 @@ public class Kiosk {
 
     private final List<Menu> menuList;
 
-    private final InputReader reader = new InputReader();
+    private final Reader reader = new Reader();
+    private final Printer printer = new Printer();
+
     private final ShoppingCart shoppingCart = new ShoppingCart();
 
 
@@ -53,7 +57,7 @@ public class Kiosk {
                 // 주문 선택
                 // ===========================================
                 if (selectedMenu == KioskMenuSelect.ORDER) {    // 주문하기
-                    printShoppingCartList();
+                    printer.printShoppingCartList(shoppingCart);
 
                     if (selectOrder()) {
                         // ===========================================
@@ -76,7 +80,7 @@ public class Kiosk {
                 }
             }
 
-            printSeparateLine();
+            printer.printSeparateLine();
 
             // ===========================================
             // 상세 메뉴(MenuItem) 선택
@@ -97,19 +101,19 @@ public class Kiosk {
                 }
             }
 
-            printSeparateLine();
+            printer.printSeparateLine();
         }
     }
 
     // 올바르지 않은 입력(0 ~ menu size 숫자 데이터가 아닌 입력)이 들어오면 null 반환
     private Optional<KioskMenuSelect> selectMenu() {
         // 메뉴 리스트 출력
-        printMenuList();
+        printer.printMenuList(menuList);
         System.out.println("0. 종료 \t | 종료");
 
         // 장바구니가 비어있지 않다면 내용 출력
         if (!shoppingCart.isCartEmpty()) {
-            printOrderSelect();
+            printer.printOrderSelect();
 
             // 사용자로부터 메뉴 입력 받음. 장바구니에 상품이 들어있다면 선택지 2개 추가
             reader.read(menuList.size() + 2);
@@ -123,7 +127,7 @@ public class Kiosk {
         } else {
             // 숫자 형식이 아닌 데이터가 입력됨
             System.out.println("올바르지 않은 입력입니다.");
-            printSeparateLine();
+            printer.printSeparateLine();
             return Optional.empty();
         }
     }
@@ -146,7 +150,7 @@ public class Kiosk {
             // 유효한 값을 입력받을 때까지 루프
             if (!reader.isValid()) {
                 System.out.println("올바르지 않은 입력입니다!");
-                printSeparateLine();
+                printer.printSeparateLine();
                 continue;
             }
             
@@ -173,7 +177,7 @@ public class Kiosk {
             // 유효한 값을 입력받을 때까지 루프
             if (!reader.isValid() || reader.getValue() == 0) {
                 System.out.println("올바르지 않은 입력입니다!");
-                printSeparateLine();
+                printer.printSeparateLine();
                 continue;
             }
 
@@ -191,7 +195,7 @@ public class Kiosk {
 
             if (!reader.isValid() || reader.getValue() == 0) {
                 System.out.println("올바르지 않은 입력입니다!");
-                printSeparateLine();
+                printer.printSeparateLine();
                 continue;
             }
 
@@ -208,53 +212,12 @@ public class Kiosk {
 
             if (!reader.isValid() || reader.getValue() == 0) {
                 System.out.println("올바르지 않은 입력입니다!");
-                printSeparateLine();
+                printer.printSeparateLine();
                 continue;
             }
 
             return DiscountRate.fromIndex(reader.getValue());
         }
-    }
-
-    private void printMenuList() {
-        System.out.println("[ MAIN MENU ]");
-        for (int i = 0; i < menuList.size(); i++) {
-            System.out.printf("%d. %s\n", i + 1, menuList.get(i).getCategory());
-        }
-    }
-
-    private void printOrderSelect() {
-        System.out.println("[ ORDER MENU ]");
-        System.out.println("4. Orders \t | 장바구니를 확인 후 주문합니다.");
-        System.out.println("5. Cancel \t | 진행 중인 주문을 취소합니다.");
-    }
-
-    private void printShoppingCartList() {
-        System.out.println("아래와 같이 주문 하시겠습니까?");
-        System.out.println();
-        System.out.println("[ Orders ]");
-
-        for (KioskMenuSelect category : KioskMenu.MENU_CATEGORIES) {
-            System.out.printf("<< %s >> \n", category);
-            shoppingCart.getShoppingCartListByCategory(category)
-                    .forEach(s ->
-                            System.out.printf("%d EA * %s \t | W %.2f\t | %s\n",
-                                    s.getQuantity(),
-                                    s.getMenuItem().name(),
-                                    s.getMenuItem().price(),
-                                    s.getMenuItem().desc()
-                            )
-                    );
-        }
-
-        System.out.println();
-        System.out.println("[ Total ]");
-        System.out.println("W " + shoppingCart.getTotalPrice());
-        System.out.println();
-    }
-
-    private void printSeparateLine() {
-        System.out.println("===========================================\n");
     }
 
 }

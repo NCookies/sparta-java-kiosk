@@ -1,14 +1,14 @@
-package xyz.ncookie.kiosk;
+package xyz.ncookie.io;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class InputReader {
+public class Reader {
     private boolean isValid;
     private int value;
     private final Scanner sc;
 
-    public InputReader() {
+    public Reader() {
         sc = new Scanner(System.in);
     }
 
