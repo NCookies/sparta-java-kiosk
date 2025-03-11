@@ -21,7 +21,7 @@ public class Order {
     public void applyDiscount(DiscountType discountType) {
         discountRate = discountType.getRate();
         discountedPrice = totalPayment * discountRate;
-        totalPayment = totalPayment - discountRate;
+        totalPayment = totalPayment - discountedPrice;
     }
 
     public void finishOrder() {
