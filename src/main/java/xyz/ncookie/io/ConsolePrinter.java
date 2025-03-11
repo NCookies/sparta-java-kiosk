@@ -15,6 +15,10 @@ public class ConsolePrinter implements Printer {
         System.out.println(s);
     }
 
+    public void printWithOutNewLine(String s) {
+        System.out.print(s);
+    }
+
     public void printMenuList(List<Menu> menuList) {
         System.out.println("[ MAIN MENU ]");
         for (int i = 0; i < menuList.size(); i++) {

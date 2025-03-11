@@ -33,14 +33,16 @@ public class Kiosk {
     }
 
     public void start() {
-        // 메뉴 선택 단계에서 사용자가 0(KioskMenuSelect.NONE)을 입력할 때에만 이 루프와 함께 프로그램이 종료된다.
+        // 메뉴 선택 단계에서 사용자가 0(KioskMenuSelect.NONE)을 입력할 때에만 루프와 함께 프로그램을 종료한다.
         while (true) {
             // ===========================================
             // 메뉴판(Menu) 선택
             // ===========================================
             KioskMenuSelect selectedMenu = selectMenu();
 
+            // ===========================================
             // 메뉴 선택에서 0이 입력되면 루프 종료
+            // ===========================================
             if (selectedMenu == KioskMenuSelect.NONE) {
                 break;
             }
@@ -63,6 +65,7 @@ public class Kiosk {
                         break;
                     } else {
                         printer.print("메인 화면으로 돌아갑니다.");
+                        printer.printSeparateLine();
                         continue;
                     }
                 } else if (selectedMenu == KioskMenuSelect.CANCEL) {  // 주문 취소하기
@@ -71,6 +74,9 @@ public class Kiosk {
 
                     shoppingCart.clearShoppingCart();
                     printer.print("(장바구니 초기화 완료)");
+                    printer.printSeparateLine();
+
+                    continue;
                 }
             }
 
@@ -82,13 +88,13 @@ public class Kiosk {
             Optional<MenuItem> optionalMenuItem = selectMenuItem(selectedMenu);
             if (optionalMenuItem.isPresent()) {
                 MenuItem selectedMenuItem = optionalMenuItem.get();
-                printer.print(String.format("선택한 메뉴: %s(W %.2f, %s)\n\n", selectedMenuItem.name(), selectedMenuItem.price(), selectedMenuItem.desc()));
+                printer.print(String.format("선택한 메뉴: %s(W %.2f, %s)", selectedMenuItem.name(), selectedMenuItem.price(), selectedMenuItem.desc()));
 
                 // ===========================================
                 // 장바구니 선택
                 // ===========================================
                 if (selectAddShoppingCartItem()) {
-                    printer.print(String.format("%s 이(가) 장바구니에 추가되었습니다.\n", selectedMenuItem.name()));
+                    printer.print(String.format("%s 이(가) 장바구니에 추가되었습니다.", selectedMenuItem.name()));
                     shoppingCart.addCartItem(selectedMenu, selectedMenuItem);
                 } else {
                     printer.print("장바구니 담기를 취소합니다.");

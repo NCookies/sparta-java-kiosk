@@ -15,6 +15,7 @@ public class Reader {
 
         while (true) {
             try {
+                printer.printWithOutNewLine("입력: ");
                 value = Integer.parseInt(sc.nextLine());
                 if (value >= 0 && value <= listSize) {
                     break;
@@ -33,6 +34,7 @@ public class Reader {
 
         while (true) {
             try {
+                printer.printWithOutNewLine("입력: ");
                 value = Integer.parseInt(sc.nextLine());
                 if (value == 1 || value == 2) {
                     break;
