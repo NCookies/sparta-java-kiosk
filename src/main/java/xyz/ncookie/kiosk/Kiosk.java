@@ -65,12 +65,11 @@ public class Kiosk {
                         // ===========================================
                         order.applyDiscount(selectDiscount());
                         order.finishOrder();
-                        break;
-                    } else {
-                        printer.print("메인 화면으로 돌아갑니다.");
-                        printer.printSeparateLine();
-                        continue;
                     }
+
+                    printer.print("메인 화면으로 돌아갑니다.");
+                    printer.printSeparateLine();
+                    continue;
                 } else if (selectedMenu == KioskMenuSelect.CANCEL) {  // 주문 취소하기
                     // 초기 상태로 복구 (장바구니 비우기)
                     printer.print("주문을 취소합니다. 감사합니다.");
