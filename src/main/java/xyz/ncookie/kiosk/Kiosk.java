@@ -38,14 +38,7 @@ public class Kiosk {
             // ===========================================
             // 메뉴판(Menu) 선택
             // ===========================================
-            Optional<KioskMenuSelect> optionalKioskMenuCategory = selectMenu();
-
-            // 올바르지 않은 메뉴 선택할 시 다시 입력
-            if (optionalKioskMenuCategory.isEmpty()) {
-                continue;
-            }
-            
-            KioskMenuSelect selectedMenu = optionalKioskMenuCategory.get();
+            KioskMenuSelect selectedMenu = selectMenu();
 
             // 메뉴 선택에서 0이 입력되면 루프 종료
             if (selectedMenu == KioskMenuSelect.NONE) {
@@ -55,7 +48,7 @@ public class Kiosk {
             // 장바구니에 상품이 들어있는 상태에서
             if (!shoppingCart.isCartEmpty()) {
                 // ===========================================
-                // 주문 선택
+                // 주문하기 또는 취소 선택
                 // ===========================================
                 if (selectedMenu == KioskMenuSelect.ORDER) {    // 주문하기
                     printer.printShoppingCartList(shoppingCart);
@@ -109,7 +102,7 @@ public class Kiosk {
     }
 
     // 올바르지 않은 입력(0 ~ menu size 숫자 데이터가 아닌 입력)이 들어오면 null 반환
-    private Optional<KioskMenuSelect> selectMenu() {
+    private KioskMenuSelect selectMenu() {
         // 메뉴 리스트 출력
         printer.printMenuList(menuList);
         printer.print("0. 종료 \t | 종료");
@@ -119,20 +112,13 @@ public class Kiosk {
             printer.printOrderSelect();
 
             // 사용자로부터 메뉴 입력 받음. 장바구니에 상품이 들어있다면 선택지 2개 추가
-            reader.read(menuList.size() + 2);
+            reader.readValidInput(menuList.size() + 2);
         } else {
             // 사용자로부터 메뉴 입력 받음
-            reader.read(menuList.size());
+            reader.readValidInput(menuList.size());
         }
 
-        if (reader.isValid()) {
-            return Optional.of(KioskMenuSelect.fromValue(reader.getValue()));
-        } else {
-            // 숫자 형식이 아닌 데이터가 입력됨
-            printer.print("올바르지 않은 입력입니다.");
-            printer.printSeparateLine();
-            return Optional.empty();
-        }
+        return KioskMenuSelect.fromValue(reader.getValue());
     }
 
     // 0이 입력(메인 화면으로 돌아가기)되면 null 반환
@@ -140,87 +126,51 @@ public class Kiosk {
     private Optional<MenuItem> selectMenuItem(KioskMenuSelect menuCategory) {
         Menu selectedMenu = menuList.get(menuCategory.getIndex() - 1);
 
-        while (true) {
-            // 해당 카테고리의 MenuItem 출력
-            printer.print(String.format("[ %s MENU ]\n", selectedMenu.getCategory().getDesc()));
+        // 해당 카테고리의 MenuItem 출력
+        printer.print(String.format("[ %s MENU ]", selectedMenu.getCategory().getDesc()));
 
-            // MenuItem 리스트 출력
-            printer.printMenuItemList(selectedMenu);
-            printer.print("0. 뒤로가기");
+        // MenuItem 리스트 출력
+        printer.printMenuItemList(selectedMenu);
+        printer.print("0. 뒤로가기");
 
-            reader.read(selectedMenu.getMenuItems().size());
+        reader.readValidInput(selectedMenu.getMenuItems().size());
 
-            // 유효한 값을 입력받을 때까지 루프
-            if (!reader.isValid()) {
-                printer.print("올바르지 않은 입력입니다!");
-                printer.printSeparateLine();
-                continue;
-            }
-            
-            // 메인 화면으로 복귀
-            if (reader.getValue() == 0) {
-                printer.print("메인 화면으로 돌아갑니다.");
-                return Optional.empty();
-            }
-
-            // 정상적으로 메뉴 아이템 선택
-            MenuItem selectedMenuItem = selectedMenu.getMenuItems().get(reader.getValue() - 1);
-            return Optional.of(selectedMenuItem);
+        // 메인 화면으로 복귀
+        if (reader.getValue() == 0) {
+            printer.print("메인 화면으로 돌아갑니다.");
+            return Optional.empty();
         }
+
+        // 정상적으로 메뉴 아이템 선택
+        MenuItem selectedMenuItem = selectedMenu.getMenuItems().get(reader.getValue() - 1);
+        return Optional.of(selectedMenuItem);
     }
 
     private boolean selectAddShoppingCartItem() {
-        while (true) {
-            printer.print("위 메뉴를 장바구니에 추가하시겠습니까?");
-            printer.print("1. 확인 \t 2. 취소");
+        printer.print("위 메뉴를 장바구니에 추가하시겠습니까?");
+        printer.print("1. 확인 \t 2. 취소");
 
-            // 선택지가 2개만 있기 때문에 파라미터로 2 전달 (확인 or 취소)
-            reader.read(2);
+        reader.readBooleanChoice();
 
-            // 유효한 값을 입력받을 때까지 루프
-            if (!reader.isValid() || reader.getValue() == 0) {
-                printer.print("올바르지 않은 입력입니다!");
-                printer.printSeparateLine();
-                continue;
-            }
-
-            return reader.getValue() == 1;
-        }
+        return reader.getValue() == 1;
     }
 
-    // TODO: 위의 selectAddShoppingCartItem() 메소드와 거의 유사하다. 코드 재사용 가능성 생각해보자
     private boolean selectOrder() {
-        while (true) {
-            printer.print("1. 주문");
-            printer.print("2. 메뉴판");
+        printer.print("1. 주문");
+        printer.print("2. 메뉴판");
 
-            reader.read(2);
+        reader.readBooleanChoice();
 
-            if (!reader.isValid() || reader.getValue() == 0) {
-                printer.print("올바르지 않은 입력입니다!");
-                printer.printSeparateLine();
-                continue;
-            }
-
-            return reader.getValue() == 1;
-        }
+        return reader.getValue() == 1;
     }
 
     private DiscountRate selectDiscount() {
-        while (true) {
-            printer.print("할인 정보를 입력해주세요.");
-            printer.printDiscountRate();
+        printer.print("할인 정보를 입력해주세요.");
+        printer.printDiscountRate();
 
-            reader.read(4);
+        reader.readValidInput(4);
 
-            if (!reader.isValid() || reader.getValue() == 0) {
-                printer.print("올바르지 않은 입력입니다!");
-                printer.printSeparateLine();
-                continue;
-            }
-
-            return DiscountRate.fromIndex(reader.getValue());
-        }
+        return DiscountRate.fromIndex(reader.getValue());
     }
 
 }

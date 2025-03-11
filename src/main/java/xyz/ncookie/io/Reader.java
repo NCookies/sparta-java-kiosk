@@ -1,37 +1,60 @@
 package xyz.ncookie.io;
 
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Reader {
-    private boolean isValid;
-    private int value;
-    private final Scanner sc;
+    
+    private Integer value;
 
-    public Reader() {
-        sc = new Scanner(System.in);
-    }
+    private final Printer printer = new ConsolePrinter();
+    private final Scanner sc = new Scanner(System.in);
 
-    public void read(int listSize) {
-        isValid = false;
-        value = -1;
+    // 유효한 입력값을 받을 때까지 루프. 주어진 선택지의 입력값만 받음
+    public void readValidInput(int listSize) {
+        init();
 
-        try {
-            value = sc.nextInt();
-            if (value >= 0 && value <= listSize) {
-                isValid = true;
+        while (true) {
+            try {
+                value = Integer.parseInt(sc.nextLine());
+                if (value >= 0 && value <= listSize) {
+                    break;
+                } else {
+                    noticeInvalidInput();
+                }
+            } catch (NumberFormatException e) {
+                noticeInvalidInput();
             }
-        } catch (InputMismatchException e) {
-            isValid = false;
-            sc.next();
         }
     }
 
-    public boolean isValid() {
-        return isValid;
+    // 두 가지 선택지만 유효할 때 사용
+    public void readBooleanChoice() {
+        init();
+
+        while (true) {
+            try {
+                value = Integer.parseInt(sc.nextLine());
+                if (value == 1 || value == 2) {
+                    break;
+                }
+            } catch (NumberFormatException e) {
+                noticeInvalidInput();
+            }
+        }
+    }
+
+    private void init() {
+        value = Integer.MIN_VALUE;
     }
 
     public int getValue() {
         return value;
     }
+    
+    // 유효하지 않은 입력값이 들어왔을 때 출력
+    private void noticeInvalidInput() {
+        printer.print("유효하지 않은 입력입니다.");
+        printer.printSeparateLine();
+    }
+    
 }
