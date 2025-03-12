@@ -3,6 +3,7 @@ package xyz.ncookie.data;
 import java.util.stream.Stream;
 
 public enum KioskMenuSelect {
+
     NONE(0, "NONE"),
     BURGERS(1, "BURGERS"),
     DRINKS(2, "DRINKS"),
@@ -32,4 +33,5 @@ public enum KioskMenuSelect {
                 .findFirst()
                 .get();     // InputReader에서 이미 숫자 범위를 확인하고 사용하므로 바로 get() 해도 됨
     }
+
 }
