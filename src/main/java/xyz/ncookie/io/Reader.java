@@ -38,6 +38,8 @@ public class Reader {
                 value = Integer.parseInt(sc.nextLine());
                 if (value == 1 || value == 2) {
                     break;
+                } else {
+                    noticeInvalidInput();
                 }
             } catch (NumberFormatException e) {
                 noticeInvalidInput();
