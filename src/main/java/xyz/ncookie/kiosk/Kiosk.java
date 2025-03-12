@@ -40,6 +40,7 @@ public class Kiosk {
             // 메뉴판(Menu) 선택
             // ===========================================
             KioskMenuSelect selectedMenu = selectMenu();
+            printer.printSeparateLine();
 
             // ===========================================
             // 메뉴 선택에서 0이 입력되면 루프 종료
@@ -47,62 +48,20 @@ public class Kiosk {
             if (selectedMenu == KioskMenuSelect.NONE) {
                 break;
             }
-            
-            // 장바구니에 상품이 들어있는 상태에서
-            if (shoppingCart.isCartNotEmpty()) {
-                // ===========================================
-                // 주문하기 또는 취소 선택
-                // ===========================================
-                if (selectedMenu == KioskMenuSelect.ORDER) {    // 주문하기
-                    printer.printShoppingCartList(shoppingCart);
 
-                    if (selectOrder()) {
-                        // 주문 객체 생성
-                        Order order = new Order(shoppingCart.getTotalPrice());
-
-                        // ===========================================
-                        // 할인 적용 및 주문 완료
-                        // ===========================================
-                        order.applyDiscount(selectDiscount());
-                        order.finishOrder();
-                    }
-
-                    printer.print("메인 화면으로 돌아갑니다.");
-                    printer.printSeparateLine();
-                    continue;
-                } else if (selectedMenu == KioskMenuSelect.CANCEL) {  // 주문 취소하기
-                    // 초기 상태로 복구 (장바구니 비우기)
-                    printer.print("주문을 취소합니다. 감사합니다.");
-
-                    shoppingCart.clearShoppingCart();
-                    printer.print("(장바구니 초기화 완료)");
-                    printer.printSeparateLine();
-
-                    continue;
-                }
+            // ===========================================
+            // 주문하기 또는 취소 선택 (4 또는 5 선택 시)
+            // ===========================================
+            if (shoppingCart.isCartNotEmpty() && selectOrderOrClearShoppingCart(selectedMenu)) {
+                // 주문 처리 OR 주문 취소 OR 장바구니 초기화 => 작업 처리 후 메인 화면으로 복귀
+                continue;
             }
-
-            printer.printSeparateLine();
 
             // ===========================================
             // 상세 메뉴(MenuItem) 선택
             // ===========================================
-            Optional<MenuItem> optionalMenuItem = selectMenuItem(selectedMenu);
-            if (optionalMenuItem.isPresent()) {
-                MenuItem selectedMenuItem = optionalMenuItem.get();
-                printer.print(String.format("선택한 메뉴: %s(W %.2f, %s)", selectedMenuItem.name(), selectedMenuItem.price(), selectedMenuItem.desc()));
-                printer.printSeparateLine();
-
-                // ===========================================
-                // 장바구니 선택
-                // ===========================================
-                if (selectAddShoppingCartItem()) {
-                    printer.print(String.format("%s 이(가) 장바구니에 추가되었습니다.", selectedMenuItem.name()));
-                    shoppingCart.addCartItem(selectedMenu, selectedMenuItem);
-                } else {
-                    printer.print("장바구니 담기를 취소합니다.");
-                }
-            }
+            selectMenuItem(selectedMenu)
+                    .ifPresent(menuItem -> processAddMenuItemToShoppingCart(selectedMenu, menuItem));
 
             printer.printSeparateLine();
         }
@@ -154,7 +113,24 @@ public class Kiosk {
         MenuItem selectedMenuItem = selectedMenu.getMenuItems().get(reader.getValue() - 1);
         return Optional.of(selectedMenuItem);
     }
+    
+    // 선택한 상품을 장바구니에 담는 작업 수행
+    private void processAddMenuItemToShoppingCart(KioskMenuSelect selectedMenu, MenuItem selectedMenuItem) {
+        printer.print(String.format("선택한 메뉴: %s(W %.2f, %s)", selectedMenuItem.name(), selectedMenuItem.price(), selectedMenuItem.desc()));
+        printer.printSeparateLine();
 
+        // ===========================================
+        // 장바구니 선택
+        // ===========================================
+        if (selectAddShoppingCartItem()) {
+            printer.print(String.format("%s 이(가) 장바구니에 추가되었습니다.", selectedMenuItem.name()));
+            shoppingCart.addCartItem(selectedMenu, selectedMenuItem);
+        } else {
+            printer.print("장바구니 담기를 취소합니다.");
+        }
+    }
+
+    // 상품을 장바구니에 담을지 선택
     private boolean selectAddShoppingCartItem() {
         printer.print("위 메뉴를 장바구니에 추가하시겠습니까?");
         printer.print("1. 확인 \t 2. 취소");
@@ -164,7 +140,47 @@ public class Kiosk {
         return reader.getValue() == 1;
     }
 
-    private boolean selectOrder() {
+    // 주문하기 또는 장바구니 비우기
+    private boolean selectOrderOrClearShoppingCart(KioskMenuSelect selectedMenu) {
+        // 주문하기
+        if (selectedMenu == KioskMenuSelect.ORDER) {
+            printer.printShoppingCartList(shoppingCart);
+
+            if (selectOrderOrCancel()) {
+                // 주문 객체 생성
+                Order order = new Order(shoppingCart.getTotalPrice());
+
+                // ===========================================
+                // 할인 적용 및 주문 완료
+                // ===========================================
+                order.applyDiscount(selectDiscount());
+                order.finishOrder();
+
+                shoppingCart.clearShoppingCart();
+            }
+
+            printer.print("메인 화면으로 돌아갑니다.");
+            printer.printSeparateLine();
+
+            return true;
+        }
+
+        // 초기 상태로 복구 (장바구니 비우기)
+        if (selectedMenu == KioskMenuSelect.CANCEL) {
+            printer.print("주문을 취소합니다. 감사합니다.");
+
+            shoppingCart.clearShoppingCart();
+            printer.print("(장바구니 초기화 완료)");
+            printer.printSeparateLine();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    // 주문하기 또는 메뉴판으로 돌아가기 선택
+    private boolean selectOrderOrCancel() {
         printer.print("1. 주문");
         printer.print("2. 메뉴판");
 
@@ -173,6 +189,7 @@ public class Kiosk {
         return reader.getValue() == 1;
     }
 
+    // 할인 타입 선택
     private DiscountType selectDiscount() {
         printer.print("할인 정보를 입력해주세요.");
         printer.printDiscountRate();
