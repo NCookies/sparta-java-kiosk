@@ -50,7 +50,7 @@ public class Kiosk {
             }
 
             // ===========================================
-            // 주문하기 또는 취소 선택 (4 또는 5 선택 시)
+            // 주문하기 또는 장바구니 비우기 선택 (4 또는 5 선택 시)
             // ===========================================
             if (shoppingCart.isCartNotEmpty() && selectOrderOrClearShoppingCart(selectedMenu)) {
                 // 주문 처리 OR 주문 취소 OR 장바구니 초기화 => 작업 처리 후 메인 화면으로 복귀
@@ -166,8 +166,8 @@ public class Kiosk {
         }
 
         // 초기 상태로 복구 (장바구니 비우기)
-        if (selectedMenu == KioskMenuSelect.CANCEL) {
-            printer.print("주문을 취소합니다. 감사합니다.");
+        if (selectedMenu == KioskMenuSelect.CLEAR) {
+            printer.print("장바구니를 초기화합니다. 감사합니다.");
 
             shoppingCart.clearShoppingCart();
             printer.print("(장바구니 초기화 완료)");

@@ -9,7 +9,7 @@ public enum KioskMenuSelect {
     DRINKS(2, "DRINKS"),
     DESSERTS(3, "DESSERTS"),
     ORDER(4, "ORDER"),
-    CANCEL(5, "CANCEL");
+    CLEAR(5, "CLEAR");
 
     private final int index;
     private final String desc;
