@@ -37,11 +37,10 @@ public class ConsolePrinter implements Printer {
     public void printOrderSelect() {
         System.out.println("[ ORDER MENU ]");
         System.out.println("4. Orders \t | 장바구니를 확인 후 주문합니다.");
-        System.out.println("5. Cancel \t | 진행 중인 주문을 취소합니다.");
+        System.out.println("5. Clear  \t | 장바구니를 초기화합니다.");
     }
 
     public void printShoppingCartList(ShoppingCart shoppingCart) {
-        printSeparateLine();
         System.out.println("아래와 같이 주문 하시겠습니까?");
         System.out.println();
         System.out.println("[ Orders ]");
