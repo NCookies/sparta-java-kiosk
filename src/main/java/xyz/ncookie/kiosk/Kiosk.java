@@ -63,13 +63,13 @@ public class Kiosk {
                     // ===========================================
                     // 상세 메뉴(MenuItem) 선택 화면
                     // ===========================================
-                    selectMenuItem(selectedMenu);
+                    selectMenuItem();
                     break;
                 case SELECT_ADD_CART:
                     // ===========================================
                     // 장바구니 담기
                     // ===========================================
-                    processAddMenuItemToShoppingCart(selectedMenu, selectedMenuItem);
+                    processAddMenuItemToShoppingCart();
                     break;
                 case SELECT_CONFIRM_ORDER:
                     // ===========================================
@@ -146,17 +146,17 @@ public class Kiosk {
     }
 
     // 상세 메뉴 선택
-    private void selectMenuItem(KioskMenuSelect menuCategory) {
-        Menu selectedMenu = menuList.get(menuCategory.getIndex() - 1);
+    private void selectMenuItem() {
+        Menu menu = menuList.get(selectedMenu.getIndex() - 1);
 
         // 해당 카테고리의 MenuItem 출력
-        printer.print(String.format("[ %s MENU ]", selectedMenu.getCategory().getDesc()));
+        printer.print(String.format("[ %s MENU ]", menu.getCategory().getDesc()));
 
         // MenuItem 리스트 출력
-        printer.printMenuItemList(selectedMenu);
+        printer.printMenuItemList(menu);
         printer.print("0. 뒤로가기");
 
-        reader.readValidInput(selectedMenu.getMenuItems().size(), true);
+        reader.readValidInput(menu.getMenuItems().size(), true);
 
         // 메인 화면으로 복귀
         if (reader.getValue() == 0) {
@@ -166,7 +166,7 @@ public class Kiosk {
         }
 
         // 정상적으로 메뉴 아이템 선택
-        selectedMenuItem = selectedMenu.getMenuItems().get(reader.getValue() - 1);
+        selectedMenuItem = menu.getMenuItems().get(reader.getValue() - 1);
         setScreenStatus(ScreenStatus.SELECT_ADD_CART);
     }
 
@@ -201,7 +201,7 @@ public class Kiosk {
     }
 
     // 선택한 상품을 장바구니에 담는 작업 수행
-    private void processAddMenuItemToShoppingCart(KioskMenuSelect selectedMenu, MenuItem selectedMenuItem) {
+    private void processAddMenuItemToShoppingCart() {
         printer.print(String.format("선택한 메뉴: %s(W %.2f, %s)", selectedMenuItem.name(), selectedMenuItem.price(), selectedMenuItem.desc()));
         printer.printSeparateLine();
 
