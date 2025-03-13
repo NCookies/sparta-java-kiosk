@@ -10,14 +10,17 @@ public class Reader {
     private final Scanner sc = new Scanner(System.in);
 
     // 유효한 입력값을 받을 때까지 루프. 주어진 선택지의 입력값만 받음
-    public void readValidInput(int listSize) {
+    public void readValidInput(int listSize, boolean includeZero) {
         init();
+        
+        // includeZero 옵션에 따라 valid 범위에 0을 포함
+        int validRangeFirstValue = includeZero ? 0 : 1;
 
         while (true) {
             try {
                 printer.printWithOutNewLine("입력: ");
                 value = Integer.parseInt(sc.nextLine());
-                if (value >= 0 && value <= listSize) {
+                if (value >= validRangeFirstValue && value <= listSize) {
                     break;
                 } else {
                     noticeInvalidInput();
