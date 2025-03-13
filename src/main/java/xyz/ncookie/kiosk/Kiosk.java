@@ -99,7 +99,7 @@ public class Kiosk {
         printer.print("0. 종료 \t | 종료");
 
         // 사용자로부터 메뉴 입력 받음
-        reader.readValidInput(menuList.size());
+        reader.readValidInput(menuList.size(), true);
 
         selectedMenu = KioskMenuSelect.fromValue(reader.getValue());
         if (selectedMenu == KioskMenuSelect.NONE) {
@@ -119,7 +119,7 @@ public class Kiosk {
         printer.printOrderSelect();             // 주문하기, 장바구니 초기화 메뉴
 
         // 사용자로부터 메뉴 입력 받음
-        reader.readValidInput(menuList.size() + 2);
+        reader.readValidInput(menuList.size() + 2, true);
 
         // 사용자 입력에 따라 screenStatus 설정
         selectedMenu = KioskMenuSelect.fromValue(reader.getValue());
@@ -156,7 +156,7 @@ public class Kiosk {
         printer.printMenuItemList(selectedMenu);
         printer.print("0. 뒤로가기");
 
-        reader.readValidInput(selectedMenu.getMenuItems().size());
+        reader.readValidInput(selectedMenu.getMenuItems().size(), true);
 
         // 메인 화면으로 복귀
         if (reader.getValue() == 0) {
@@ -195,7 +195,7 @@ public class Kiosk {
         printer.print("할인 정보를 입력해주세요.");
         printer.printDiscountRate();
 
-        reader.readValidInput(4);
+        reader.readValidInput(DiscountType.values().length, false);
 
         return DiscountType.fromIndex(reader.getValue());
     }
