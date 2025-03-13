@@ -41,7 +41,6 @@ public class ConsolePrinter implements Printer {
     }
 
     public void printShoppingCartList(ShoppingCart shoppingCart) {
-        printSeparateLine();
         System.out.println("아래와 같이 주문 하시겠습니까?");
         System.out.println();
         System.out.println("[ Orders ]");
